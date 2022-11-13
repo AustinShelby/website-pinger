@@ -1,5 +1,12 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 
+const regions = [
+  {
+    name: "Singapore",
+    url: "https://faas-sgp1-18bc02ac.doserverless.co/api/v1/web/fn-c70d76cc-9eea-459c-8e09-73003a6b8d79/default/ping-website",
+  },
+];
+
 const HomePage = () => {
   const [url, setUrl] = useState<string>("");
 

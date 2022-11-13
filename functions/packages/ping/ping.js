@@ -1,11 +1,12 @@
-const main = async () => {
-  const website =
-    "https://stackoverflow.com/questions/29775797/fetch-post-json-data";
+const main = async (args) => {
+  const website = args.url;
   const start = process.hrtime.bigint();
-  const result = await fetch(website);
+  await fetch(website);
   const end = process.hrtime.bigint();
   return {
-    body: `Request took: ${((end - start) / BigInt(1_000_000)).toString()}ms`,
+    body: JSON.stringify({
+      durationMs: Number(((end - start) / BigInt(1_000_000)).toString()),
+    }),
     headers: { "content-type": "application/json" },
   };
 };
