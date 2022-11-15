@@ -13,6 +13,10 @@ const regions = [
     name: "London",
     url: "https://faas-lon1-917a94a7.doserverless.co/api/v1/web/fn-2276c8b9-7f4d-4165-a749-af9b8996cb37/pings/london-ping",
   },
+  {
+    name: "Sidney",
+    url: "https://australia-ping-fsoph.ondigitalocean.app/ping/ping",
+  },
 ];
 
 type Result = { region: string; durationMs: number };
