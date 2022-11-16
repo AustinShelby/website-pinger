@@ -50,7 +50,7 @@ const HomePage = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: "4rem" }}>
       <form onSubmit={submit}>
         <label htmlFor="url">URL</label>
         <input type="text" value={url} onChange={change} />
