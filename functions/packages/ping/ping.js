@@ -1,3 +1,5 @@
+import https from "https";
+
 export const main = async (args) => {
   const eventTimes = {
     startAt: process.hrtime.bigint(),
