@@ -77,12 +77,9 @@ export const main = async (args) => {
     };
   } catch (error) {
     console.error(error);
-    console.log(eventTimes);
-    res.status(500).end();
     return {
       body: JSON.stringify({ error: "Error requesting URL" }),
       headers: { "content-type": "application/json" },
-      status: 500,
     };
   }
   // return {
