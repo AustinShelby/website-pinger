@@ -1,16 +1,28 @@
 import { FC } from "react";
+import { Metrics } from "../pages";
+
+const metricTexts: { [key in Metrics]: string } = {
+  DNS: "text-data_1",
+  TCP: "text-data_2",
+  TLS: "text-data_3",
+  TTFB: "text-data_4",
+  TRANSFER: "text-data_5",
+};
 
 export const Metric: FC<{
   region: string;
-  dnsLookup: number;
-  tcpConnection: number;
-  tlsHandshake: number;
-  firstByte: number;
-  contentTransfer: number;
-  total: number;
-  maxTotal: number;
+  region_2?: string;
+  dnsLookup: number | undefined;
+  tcpConnection: number | undefined;
+  tlsHandshake: number | undefined;
+  firstByte: number | undefined;
+  contentTransfer: number | undefined;
+  total: number | undefined;
+  maxTotal: number | undefined;
+  selectedMetric?: Metrics;
 }> = ({
   region,
+  region_2,
   dnsLookup,
   tcpConnection,
   tlsHandshake,
@@ -18,53 +30,111 @@ export const Metric: FC<{
   contentTransfer,
   total,
   maxTotal,
+  selectedMetric,
 }) => {
   const totalMs =
     dnsLookup + tcpConnection + tlsHandshake + firstByte + contentTransfer;
+
+  const metricSelection: { [key in Metrics]?: number } = {
+    DNS: dnsLookup,
+    TCP: tcpConnection,
+    TLS: tlsHandshake,
+    TTFB: firstByte,
+    TRANSFER: contentTransfer,
+  };
+  const formattedParts = new Intl.NumberFormat("en-US", {
+    style: "unit",
+    unit: "millisecond",
+  }).formatToParts(metricSelection[selectedMetric] || total);
   return (
     <div className="flex items-center">
-      <h2 className="w-2/12 text-right text-gray-500 pr-4">{region}</h2>
+      <p
+        className={`text-2xl text-right ${
+          selectedMetric ? metricTexts[selectedMetric] : "text-white"
+        }  font-bold pr-6 w-2/12`}
+      >
+        {formattedParts[0].value === "NaN" ? "--" : formattedParts[0].value}
+        &nbsp;
+        <span className="text-base font-normal">{formattedParts[2].value}</span>
+      </p>
       <div className="w-8/12">
-        <div className="flex h-8">
-          <div
-            className="bg-red-600 hover:bg-red-500 cursor-pointer"
-            style={{
-              width: `${(dnsLookup / totalMs) * (total / maxTotal) * 100}%`,
-            }}
-          ></div>
-          <div
-            className="bg-purple-600 hover:bg-purple-500 cursor-pointer"
-            style={{
-              width: `${(tcpConnection / totalMs) * (total / maxTotal) * 100}%`,
-            }}
-          ></div>
-          <div
-            className="bg-orange-600 hover:bg-orange-500 cursor-pointer"
-            style={{
-              width: `${(tlsHandshake / totalMs) * (total / maxTotal) * 100}%`,
-            }}
-          ></div>
-          <div
-            className="bg-green-600 hover:bg-green-500 cursor-pointer"
-            style={{
-              width: `${(firstByte / totalMs) * (total / maxTotal) * 100}%`,
-            }}
-          ></div>
-          <div
-            className="bg-blue-600 hover:bg-blue-500 cursor-pointer"
-            style={{
-              width: `${
-                (contentTransfer / totalMs) * (total / maxTotal) * 100
-              }%`,
-            }}
-          ></div>
-        </div>
+        {dnsLookup &&
+          tcpConnection &&
+          tlsHandshake &&
+          firstByte &&
+          contentTransfer &&
+          total &&
+          maxTotal && (
+            <div className="flex h-10 space-x-px">
+              <div
+                className={`bg-data_1 cursor-pointer ${
+                  selectedMetric === undefined || selectedMetric === "DNS"
+                    ? "opacity-100"
+                    : "opacity-30"
+                }`}
+                style={{
+                  width: `${(dnsLookup / totalMs) * (total / maxTotal) * 100}%`,
+                }}
+              ></div>
+              <div
+                className={`bg-data_2 cursor-pointer ${
+                  selectedMetric === undefined || selectedMetric === "TCP"
+                    ? "opacity-100"
+                    : "opacity-30"
+                }`}
+                style={{
+                  width: `${
+                    (tcpConnection / totalMs) * (total / maxTotal) * 100
+                  }%`,
+                }}
+              ></div>
+              <div
+                className={`bg-data_3 cursor-pointer ${
+                  selectedMetric === undefined || selectedMetric === "TLS"
+                    ? "opacity-100"
+                    : "opacity-30"
+                }`}
+                style={{
+                  width: `${
+                    (tlsHandshake / totalMs) * (total / maxTotal) * 100
+                  }%`,
+                }}
+              ></div>
+              <div
+                className={`bg-data_4 cursor-pointer ${
+                  selectedMetric === undefined || selectedMetric === "TTFB"
+                    ? "opacity-100"
+                    : "opacity-30"
+                }`}
+                style={{
+                  width: `${(firstByte / totalMs) * (total / maxTotal) * 100}%`,
+                }}
+              ></div>
+              <div
+                className={`bg-data_5 cursor-pointer ${
+                  selectedMetric === undefined || selectedMetric === "TRANSFER"
+                    ? "opacity-100"
+                    : "opacity-30"
+                }`}
+                style={{
+                  width: `${
+                    (contentTransfer / totalMs) * (total / maxTotal) * 100
+                  }%`,
+                }}
+              ></div>
+            </div>
+          )}
       </div>
-      <p className="text-xl text-right text-white font-bold pl-6 w-2/12">
-        {new Intl.NumberFormat("en-US", {
-          style: "unit",
-          unit: "millisecond",
-        }).format(total)}
+      <p className="w-2/12 text-left text-white font-semibold leading-none pl-4 whitespace-nowrap">
+        {region}
+        {region_2 && (
+          <>
+            <br />
+            <span className="text-gray-400 text-xs leading-loose font-normal">
+              {region_2}
+            </span>
+          </>
+        )}
       </p>
     </div>
   );

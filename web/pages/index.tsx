@@ -1,9 +1,11 @@
 import { ChangeEvent, FormEvent, Fragment, useState } from "react";
 import { Metric } from "../components/metric";
+import { MetricButton } from "../components/metricButton";
 
 const regions = [
   {
     name: "London",
+    name_2: "United Kingdom",
     url: "https://faas-lon1-917a94a7.doserverless.co/api/v1/web/fn-2276c8b9-7f4d-4165-a749-af9b8996cb37/pings/london-ping",
     coords: {
       top: "17%",
@@ -17,11 +19,13 @@ const regions = [
   },
   {
     name: "New York",
+    name_2: "United States",
     url: "https://faas-nyc1-2ef2e6cc.doserverless.co/api/v1/web/fn-d3627ee8-5865-429f-9444-34c626260179/pings/new-york-pink",
     coords: { top: "25%", left: "22.6%" },
   },
   {
     name: "San Fransisco",
+    name_2: "United States",
     url: "https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-89ed3221-8720-4823-b011-5ce45102d5b6/default/website-ping",
     coords: {
       top: "29%",
@@ -29,7 +33,8 @@ const regions = [
     },
   },
   {
-    name: "Sidney",
+    name: "Sydney",
+    name_2: "Australia",
     url: "https://faas-syd1-c274eac6.doserverless.co/api/v1/web/fn-6c2f190c-172d-4809-a288-b9bfe273eee9/default/australia-ping",
     coords: { top: "80%", left: "88%" },
   },
@@ -47,11 +52,14 @@ type Result = {
   };
 };
 
+export type Metrics = "DNS" | "TCP" | "TLS" | "TTFB" | "TRANSFER";
+
 const HomePage = () => {
   const [url, setUrl] = useState<string>("");
   const [results, setResults] = useState<Result[]>([]);
   const [maxTotal, setMaxTotal] = useState<number>();
   const [status, setStatus] = useState("IDLE");
+  const [metric, setMetric] = useState<Metrics | undefined>(undefined);
 
   const change = (event: ChangeEvent<HTMLInputElement>): void => {
     event.preventDefault();
@@ -87,6 +95,16 @@ const HomePage = () => {
     }
   };
 
+  const toggleMetric = (newMetric: Metrics): void => {
+    setMetric((metric) => {
+      if (metric === newMetric) {
+        return undefined;
+      } else {
+        return newMetric;
+      }
+    });
+  };
+
   const buildProperUrl = (url: string): URL => {
     if (url.search(/https?:\/\//) === 0) {
       return new URL(url);
@@ -100,6 +118,26 @@ const HomePage = () => {
         <h1 className="text-center text-white text-4xl font-bold pt-16">
           Website Speed Test
         </h1>
+        <ul>
+          <li>
+            {new Intl.NumberFormat("en-US", {
+              style: "unit",
+              unit: "millisecond",
+            }).format(1200)}
+          </li>
+          <li>
+            {new Intl.NumberFormat("en-US", {
+              style: "unit",
+              unit: "millisecond",
+            }).format(12)}
+          </li>
+          <li>
+            {new Intl.NumberFormat("en-US", {
+              style: "unit",
+              unit: "millisecond",
+            }).format(900)}
+          </li>
+        </ul>
         <div className="bg-gray-900 border border-gray-800 rounded-sm shadow-md p-8 h-32 -mb-16 z-10 relative max-w-3xl mx-auto mt-16">
           <form onSubmit={submit}>
             <label htmlFor="url" className="block mb-2 text-white">
@@ -159,7 +197,7 @@ const HomePage = () => {
       </div>
       <div className="py-48 bg-gray-900 relative">
         <div className="px-4 flex items-center">
-          <div className="relative w-1/2">
+          <div className="relative w-1/2 px-8">
             <svg
               baseProfile="tiny"
               stroke-linecap="round"
@@ -1357,22 +1395,57 @@ const HomePage = () => {
               })}
             </>
           </div>
-          <div className="w-1/2">
-            <ul className="max-w-2xl mx-auto space-y-6">
-              {results.map(({ region, results }) => (
-                <li className="" key={region}>
-                  <Metric
-                    region={region}
-                    dnsLookup={results.dnsLookup}
-                    tcpConnection={results.tcpConnection}
-                    tlsHandshake={results.tlsHandshake}
-                    firstByte={results.firstByte}
-                    contentTransfer={results.contentTransfer}
-                    total={results.total}
-                    maxTotal={maxTotal as number}
-                  />
-                </li>
-              ))}
+          <div className="w-1/2 px-8">
+            <ul className="flex flex-wrap gap-4 justify-center">
+              <MetricButton
+                metric="DNS"
+                toggleMetric={toggleMetric}
+                selectedMetric={metric}
+              />
+              <MetricButton
+                metric="TCP"
+                toggleMetric={toggleMetric}
+                selectedMetric={metric}
+              />
+              <MetricButton
+                metric="TLS"
+                toggleMetric={toggleMetric}
+                selectedMetric={metric}
+              />
+              <MetricButton
+                metric="TTFB"
+                toggleMetric={toggleMetric}
+                selectedMetric={metric}
+              />
+              <MetricButton
+                metric="TRANSFER"
+                toggleMetric={toggleMetric}
+                selectedMetric={metric}
+              />
+            </ul>
+            <ul className="space-y-6 mt-8">
+              {regions.map((region) => {
+                const regionResult = results.find(
+                  (result) => result.region === region.name
+                );
+                console.log(regionResult);
+                return (
+                  <li key={region.name}>
+                    <Metric
+                      region={region.name}
+                      region_2={region.name_2}
+                      dnsLookup={regionResult?.results.dnsLookup}
+                      tcpConnection={regionResult?.results.tcpConnection}
+                      tlsHandshake={regionResult?.results.tlsHandshake}
+                      firstByte={regionResult?.results.firstByte}
+                      contentTransfer={regionResult?.results.contentTransfer}
+                      total={regionResult?.results.total}
+                      maxTotal={maxTotal}
+                      selectedMetric={metric}
+                    />
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
