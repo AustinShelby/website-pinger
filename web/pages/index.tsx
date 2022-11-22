@@ -91,6 +91,7 @@ const HomePage = () => {
       console.log(max);
       setMaxTotal(max);
     } catch (e) {
+      setStatus("ERROR");
       console.log(e);
     }
   };
@@ -114,34 +115,14 @@ const HomePage = () => {
 
   return (
     <div className="">
-      <div className="bg-gray-900 relative border-b border-gray-800">
-        <h1 className="text-center text-white text-4xl font-bold pt-16">
+      <div className="bg-gray-900">
+        <h1 className="text-center text-white text-4xl font-bold pt-32">
           Website Speed Test
         </h1>
-        <ul>
-          <li>
-            {new Intl.NumberFormat("en-US", {
-              style: "unit",
-              unit: "millisecond",
-            }).format(1200)}
-          </li>
-          <li>
-            {new Intl.NumberFormat("en-US", {
-              style: "unit",
-              unit: "millisecond",
-            }).format(12)}
-          </li>
-          <li>
-            {new Intl.NumberFormat("en-US", {
-              style: "unit",
-              unit: "millisecond",
-            }).format(900)}
-          </li>
-        </ul>
-        <div className="bg-gray-900 border border-gray-800 rounded-sm shadow-md p-8 h-32 -mb-16 z-10 relative max-w-3xl mx-auto mt-16">
+        <div className="bg-gray-900 max-w-2xl mx-auto mt-24">
           <form onSubmit={submit}>
-            <label htmlFor="url" className="block mb-2 text-white">
-              Your website URL
+            <label htmlFor="url" className="block mb-2 text-gray-400 text-sm">
+              Your website's URL
             </label>
             <div className="flex items-center ">
               <input
@@ -150,11 +131,12 @@ const HomePage = () => {
                 name="url"
                 value={url}
                 onChange={change}
-                className="bg-gray-800 text-gray-300 py-2.5 px-4 rounded-sm block flex-1 mr-4"
+                placeholder="google.com"
+                className="bg-gray-800 text-white py-2.5 text-lg px-6 placeholder:text-gray-500 rounded-sm block flex-1 mr-4"
               />
               <button
                 disabled={status === "SEARCHING"}
-                className="block bg-green-400 text-green-900 font-semibold rounded-sm py-2.5 px-6"
+                className="block bg-data_2 text-black/80 uppercase font-bold tracking-wide rounded-sm py-2.5 px-6"
                 type="submit"
               >
                 {status === "SEARCHING" ? (
@@ -172,7 +154,7 @@ const HomePage = () => {
                       cx="50"
                       cy="50"
                       fill="none"
-                      className="stroke-current text-green-500"
+                      className="stroke-current text-black/80"
                       strokeWidth="14"
                       r="35"
                       strokeDasharray="164.93361431346415 56.97787143782138"
@@ -192,10 +174,15 @@ const HomePage = () => {
                 )}
               </button>
             </div>
+            {status === "ERROR" && (
+              <p className="text-sm text-red-600 mt-2">
+                Please enter a valid URL
+              </p>
+            )}
           </form>
         </div>
       </div>
-      <div className="py-48 bg-gray-900 relative">
+      <div className="py-32 bg-gray-900">
         <div className="px-4 flex items-center">
           <div className="relative w-1/2 px-8">
             <svg
@@ -1379,12 +1366,12 @@ const HomePage = () => {
                             </div>
                           )}
                           <p className="text-gray-300 whitespace-nowrap leading-none">
-                            {status === "IDLE" || status === "SEARCHING"
-                              ? "--"
-                              : new Intl.NumberFormat("en-US", {
+                            {status === "DONE" && result
+                              ? new Intl.NumberFormat("en-US", {
                                   style: "unit",
                                   unit: "millisecond",
-                                }).format((result as any).results.total)}
+                                }).format(result.results.total)
+                              : "--"}
                           </p>
                         </div>
                       </div>
@@ -1428,7 +1415,6 @@ const HomePage = () => {
                 const regionResult = results.find(
                   (result) => result.region === region.name
                 );
-                console.log(regionResult);
                 return (
                   <li key={region.name}>
                     <Metric
@@ -1442,6 +1428,7 @@ const HomePage = () => {
                       total={regionResult?.results.total}
                       maxTotal={maxTotal}
                       selectedMetric={metric}
+                      toggleMetric={toggleMetric}
                     />
                   </li>
                 );

@@ -20,6 +20,7 @@ export const Metric: FC<{
   total: number | undefined;
   maxTotal: number | undefined;
   selectedMetric?: Metrics;
+  toggleMetric: (metric: Metrics) => void;
 }> = ({
   region,
   region_2,
@@ -31,6 +32,7 @@ export const Metric: FC<{
   total,
   maxTotal,
   selectedMetric,
+  toggleMetric,
 }) => {
   const totalMs =
     dnsLookup + tcpConnection + tlsHandshake + firstByte + contentTransfer;
@@ -45,7 +47,11 @@ export const Metric: FC<{
   const formattedParts = new Intl.NumberFormat("en-US", {
     style: "unit",
     unit: "millisecond",
-  }).formatToParts(metricSelection[selectedMetric] || total);
+  }).formatToParts(
+    Number.isInteger(metricSelection[selectedMetric])
+      ? metricSelection[selectedMetric]
+      : total
+  );
   return (
     <div className="flex items-center">
       <p
@@ -58,29 +64,31 @@ export const Metric: FC<{
         <span className="text-base font-normal">{formattedParts[2].value}</span>
       </p>
       <div className="w-8/12">
-        {dnsLookup &&
-          tcpConnection &&
-          tlsHandshake &&
-          firstByte &&
-          contentTransfer &&
-          total &&
-          maxTotal && (
+        {Number.isInteger(dnsLookup) &&
+          Number.isInteger(tcpConnection) &&
+          Number.isInteger(tlsHandshake) &&
+          Number.isInteger(firstByte) &&
+          Number.isInteger(contentTransfer) &&
+          Number.isInteger(total) &&
+          Number.isInteger(maxTotal) && (
             <div className="flex h-10 space-x-px">
               <div
+                onClick={() => toggleMetric("DNS")}
                 className={`bg-data_1 cursor-pointer ${
                   selectedMetric === undefined || selectedMetric === "DNS"
-                    ? "opacity-100"
-                    : "opacity-30"
+                    ? "opacity-100 hover:opacity-90"
+                    : "opacity-30 hover:opacity-40"
                 }`}
                 style={{
                   width: `${(dnsLookup / totalMs) * (total / maxTotal) * 100}%`,
                 }}
               ></div>
               <div
+                onClick={() => toggleMetric("TCP")}
                 className={`bg-data_2 cursor-pointer ${
                   selectedMetric === undefined || selectedMetric === "TCP"
-                    ? "opacity-100"
-                    : "opacity-30"
+                    ? "opacity-100 hover:opacity-90"
+                    : "opacity-30 hover:opacity-40"
                 }`}
                 style={{
                   width: `${
@@ -89,10 +97,11 @@ export const Metric: FC<{
                 }}
               ></div>
               <div
+                onClick={() => toggleMetric("TLS")}
                 className={`bg-data_3 cursor-pointer ${
                   selectedMetric === undefined || selectedMetric === "TLS"
-                    ? "opacity-100"
-                    : "opacity-30"
+                    ? "opacity-100 hover:opacity-90"
+                    : "opacity-30 hover:opacity-40"
                 }`}
                 style={{
                   width: `${
@@ -101,20 +110,22 @@ export const Metric: FC<{
                 }}
               ></div>
               <div
+                onClick={() => toggleMetric("TTFB")}
                 className={`bg-data_4 cursor-pointer ${
                   selectedMetric === undefined || selectedMetric === "TTFB"
-                    ? "opacity-100"
-                    : "opacity-30"
+                    ? "opacity-100 hover:opacity-90"
+                    : "opacity-30 hover:opacity-40"
                 }`}
                 style={{
                   width: `${(firstByte / totalMs) * (total / maxTotal) * 100}%`,
                 }}
               ></div>
               <div
+                onClick={() => toggleMetric("TRANSFER")}
                 className={`bg-data_5 cursor-pointer ${
                   selectedMetric === undefined || selectedMetric === "TRANSFER"
-                    ? "opacity-100"
-                    : "opacity-30"
+                    ? "opacity-100 hover:opacity-90"
+                    : "opacity-30 hover:opacity-40"
                 }`}
                 style={{
                   width: `${

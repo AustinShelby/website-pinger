@@ -29,8 +29,8 @@ export const MetricButton: FC<{
         metricColors[metric]
       } px-6 py-2 rounded-sm font-semibold text-black/80 ${
         selectedMetric === undefined || selectedMetric === metric
-          ? "opacity-100"
-          : "opacity-30"
+          ? "opacity-100 hover:opacity-90"
+          : "opacity-30 hover:opacity-40"
       }`}
     >
       {names[metric]}
