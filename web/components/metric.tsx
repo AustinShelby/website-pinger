@@ -44,10 +44,10 @@ export const Metric: FC<{
     TTFB: firstByte,
     TRANSFER: contentTransfer,
   };
-  const formattedParts = new Intl.NumberFormat("en-US", {
+  const formattedTime = new Intl.NumberFormat("en-US", {
     style: "unit",
     unit: "millisecond",
-  }).formatToParts(
+  }).format(
     Number.isInteger(metricSelection[selectedMetric])
       ? metricSelection[selectedMetric]
       : total
@@ -55,13 +55,15 @@ export const Metric: FC<{
   return (
     <div className="flex items-center">
       <p
-        className={`text-2xl text-right ${
+        className={`text-2xl text-right tabular-nums ${
           selectedMetric ? metricTexts[selectedMetric] : "text-white"
         }  font-bold pr-6 w-2/12`}
       >
-        {formattedParts[0].value === "NaN" ? "--" : formattedParts[0].value}
+        {formattedTime.startsWith("NaN") ? "--" : formattedTime.split(" ")[0]}
         &nbsp;
-        <span className="text-base font-normal">{formattedParts[2].value}</span>
+        <span className="text-base font-normal">
+          {formattedTime.split(" ")[1]}
+        </span>
       </p>
       <div className="w-8/12">
         {Number.isInteger(dnsLookup) &&
