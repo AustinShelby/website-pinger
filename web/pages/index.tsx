@@ -6,6 +6,21 @@ import { MetricButton } from "../components/metricButton";
 
 const regions = [
   {
+    name: "San Francisco",
+    name_2: "United States",
+    url: "https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-89ed3221-8720-4823-b011-5ce45102d5b6/default/website-ping",
+    coords: {
+      top: "31%",
+      left: "8.8%",
+    },
+  },
+  {
+    name: "New York",
+    name_2: "United States",
+    url: "https://faas-nyc1-2ef2e6cc.doserverless.co/api/v1/web/fn-d3627ee8-5865-429f-9444-34c626260179/pings/new-york-pink",
+    coords: { top: "27.2%", left: "23.5%" },
+  },
+  {
     name: "London",
     name_2: "United Kingdom",
     url: "https://faas-lon1-917a94a7.doserverless.co/api/v1/web/fn-2276c8b9-7f4d-4165-a749-af9b8996cb37/pings/london-ping",
@@ -19,21 +34,6 @@ const regions = [
     name_2: "Singapore",
     url: "https://faas-sgp1-18bc02ac.doserverless.co/api/v1/web/fn-c70d76cc-9eea-459c-8e09-73003a6b8d79/default/ping-website",
     coords: { top: "57%", left: "76.5%" },
-  },
-  {
-    name: "New York",
-    name_2: "United States",
-    url: "https://faas-nyc1-2ef2e6cc.doserverless.co/api/v1/web/fn-d3627ee8-5865-429f-9444-34c626260179/pings/new-york-pink",
-    coords: { top: "27.2%", left: "23.5%" },
-  },
-  {
-    name: "San Francisco",
-    name_2: "United States",
-    url: "https://faas-sfo3-7872a1dd.doserverless.co/api/v1/web/fn-89ed3221-8720-4823-b011-5ce45102d5b6/default/website-ping",
-    coords: {
-      top: "31%",
-      left: "8.8%",
-    },
   },
   {
     name: "Sydney",
@@ -62,6 +62,7 @@ const HomePage = () => {
   const [results, setResults] = useState<Result[]>([]);
   const [maxTotal, setMaxTotal] = useState<number>();
   const [status, setStatus] = useState("IDLE");
+  // const [status, setStatus] = useState("SEARCHING");
   const [metric, setMetric] = useState<Metrics | undefined>(undefined);
 
   const change = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -169,7 +170,9 @@ const HomePage = () => {
                 />
                 <button
                   disabled={status === "SEARCHING"}
-                  className="block bg-data_2 text-black/80 uppercase font-bold tracking-wide rounded-sm py-2.5 px-6 w-full sm:w-auto"
+                  className={` ${
+                    status === "SEARCHING" ? "bg-data_2/60" : "bg-data_2"
+                  } text-black/80 uppercase flex justify-center font-bold tracking-wide rounded-sm py-2.5 px-6 w-full sm:w-auto`}
                   type="submit"
                 >
                   {status === "SEARCHING" ? (
@@ -217,7 +220,7 @@ const HomePage = () => {
         </div>
         <div className="py-32 bg-gray-900">
           <div className="px-4 flex flex-col gap-y-16 xl:flex-row items-center">
-            <div className="w-full xl:w-1/2 sm:px-8 overflow-scroll sm:overflow-auto border sm:border-0 rounded-sm border-gray-800">
+            <div className="w-full xl:w-1/2 sm:px-8 overflow-x-scroll sm:overflow-auto border sm:border-0 rounded-sm border-gray-800">
               <div className="w-[1100px] sm:w-auto flex sm:block items-center justify-center">
                 <div className="relative w-[1000px] sm:w-auto py-8 sm:py-0">
                   <svg
