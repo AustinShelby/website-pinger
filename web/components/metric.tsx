@@ -55,7 +55,7 @@ export const Metric: FC<{
   return (
     <>
       <div className="block sm:hidden">
-        <div className="flex justify-between items-end">
+        <div className="flex justify-between items-center">
           <p className="text-left text-white font-semibold leading-none whitespace-nowrap">
             {region}
             <br />

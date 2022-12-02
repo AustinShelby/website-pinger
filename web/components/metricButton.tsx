@@ -27,7 +27,7 @@ export const MetricButton: FC<{
       onClick={() => toggleMetric(metric)}
       className={`${
         metricColors[metric]
-      } px-6 py-2 rounded-sm font-semibold text-black/80 ${
+      } px-6 py-2 rounded-sm text-sm sm:text-base font-semibold text-black/80 ${
         selectedMetric === undefined || selectedMetric === metric
           ? "opacity-100 hover:opacity-90"
           : "opacity-30 hover:opacity-40"

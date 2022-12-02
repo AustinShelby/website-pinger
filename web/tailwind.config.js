@@ -20,6 +20,9 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-inter)", ...fontFamily.sans],
       },
+      dropShadow: {
+        "1px": `1px 1px 0px ${colors.red[500]}`,
+      },
     },
   },
   plugins: [],

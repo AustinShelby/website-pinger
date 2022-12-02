@@ -11,8 +11,8 @@ export const Message: FC<{ timeMs?: number }> = ({ timeMs }) => {
     <div className="absolute">
       <div className="relative w-full">
         <div className="absolute bottom-4 -left-4">
-          <div className="relative w-full">
-            <div className="flex items-center px-4 py-1.5 bg-gray-700 border-gray-900 border rounded-t-sm rounded-br-sm">
+          <div className="relative w-full drop-shadow">
+            <div className="flex items-center px-4 py-1.5 bg-gray-700 rounded-t-sm rounded-br-sm">
               {timeMs && (
                 <div className="relative z-10 h-3 w-3 rounded-full mr-4">
                   <div
@@ -39,7 +39,7 @@ export const Message: FC<{ timeMs?: number }> = ({ timeMs }) => {
                 {formattedTime}
               </p>
             </div>
-            <div className="absolute w-6 h-6 rotate-45 -bottom-3 left-[5px] bg-gray-700 border-gray-900 border-r border-b"></div>
+            <div className="absolute w-6 h-6 rotate-45 left-[5.04px] -bottom-[12px] bg-gray-700"></div>
           </div>
         </div>
       </div>

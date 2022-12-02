@@ -147,9 +147,9 @@ const HomePage = () => {
           cardType: "summary_large_image",
         }}
       />
-      <div className="min-h-screen bg-gray-900">
+      <div className="min-h-screen bg-gray-900 antialiased">
         <div className="bg-gray-900">
-          <h1 className="text-center text-white text-4xl sm:text-7xl font-bold pt-32 px-4">
+          <h1 className="text-center text-white text-4xl sm:text-7xl font-bold pt-24 sm:pt-32 px-4">
             Website Speed Test
           </h1>
           <div className="bg-gray-900 max-w-2xl mx-auto mt-24 px-4">
@@ -165,14 +165,15 @@ const HomePage = () => {
                   name="url"
                   value={url}
                   onChange={change}
+                  inputMode="url"
                   placeholder="google.com"
-                  className="bg-gray-800 text-white py-2.5 text-lg px-6 placeholder:text-gray-500 rounded-sm block flex-1 sm:mr-4 w-full sm:w-auto"
+                  className="bg-gray-800 text-white py-2.5 text-lg px-5 placeholder:text-gray-500 rounded-sm block flex-1 sm:mr-4 w-full sm:w-auto focus:outline-none focus:ring-4 focus:ring-offset-1 ring-data_2/10 ring-offset-data_2"
                 />
                 <button
                   disabled={status === "SEARCHING"}
                   className={` ${
                     status === "SEARCHING" ? "bg-data_2/60" : "bg-data_2"
-                  } text-black/80 uppercase flex justify-center font-bold tracking-wide rounded-sm py-2.5 px-6 w-full sm:w-auto`}
+                  } text-black/80 uppercase flex justify-center font-bold tracking-normal rounded-sm py-2.5 px-6 w-full sm:w-auto focus:outline-none focus:ring-4 focus:ring-offset-1 ring-data_2/10 ring-offset-data_2`}
                   type="submit"
                 >
                   {status === "SEARCHING" ? (
@@ -211,18 +212,18 @@ const HomePage = () => {
                 </button>
               </div>
               {status === "ERROR" && (
-                <p className="text-sm text-red-600 mt-2">
+                <p className="text-sm text-red-500 mt-2">
                   Please enter a valid URL
                 </p>
               )}
             </form>
           </div>
         </div>
-        <div className="py-32 bg-gray-900">
+        <div className="py-24 sm:py-32 bg-gray-900">
           <div className="px-4 flex flex-col gap-y-16 xl:flex-row items-center">
             <div className="w-full xl:w-1/2 sm:px-8 overflow-x-scroll sm:overflow-auto border sm:border-0 rounded-sm border-gray-800">
-              <div className="w-[1100px] sm:w-auto flex sm:block items-center justify-center">
-                <div className="relative w-[1000px] sm:w-auto py-8 sm:py-0">
+              <div className="w-[950px] h-[500px] sm:w-auto sm:h-auto flex sm:block items-center justify-center">
+                <div className="relative w-[900px] sm:w-auto sm:py-0">
                   <svg
                     baseProfile="tiny"
                     strokeLinecap="round"
