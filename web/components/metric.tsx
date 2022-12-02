@@ -71,8 +71,8 @@ export const Metric: FC<{
             {formattedTime.startsWith("NaN")
               ? "--"
               : formattedTime.split(" ")[0]}
-            &nbsp;
             <span className="text-base font-normal">
+              &nbsp;
               {formattedTime.split(" ")[1]}
             </span>
           </p>
